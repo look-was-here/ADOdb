@@ -1484,7 +1484,7 @@ if (!defined('_ADODB_LAYER')) {
 
 
 	/**
-	 * Complete a transation.
+	 * Complete a transaction.
 	 *
 	 * Used together with StartTrans() to end a transaction. Monitors connection
 	 * for sql errors, and will commit or rollback as appropriate.
@@ -2190,7 +2190,7 @@ if (!defined('_ADODB_LAYER')) {
 	 * @param bool       $force_array
 	 * @param bool       $first2cols
 	 *
-	 * @return array|bool
+	 * @return array|false
 	 */
 	public function GetAssoc($sql, $inputarr = false, $force_array = false, $first2cols = false) {
 		$rs = $this->Execute($sql, $inputarr);
@@ -2301,10 +2301,10 @@ if (!defined('_ADODB_LAYER')) {
 	 *                             This is only relevant if the returned string
 	 *                             is coming from a CHAR type field.
 	 *
-	 * @return array|bool 1D array containning the first row of the query
+	 * @return array|false 1D array containing each row's first column;
+	 *                     false if the statement execution fails.
 	 */
 	function GetCol($sql, $inputarr = false, $trim = false) {
-
 		$rs = $this->Execute($sql, $inputarr);
 		if ($rs) {
 			$rv = array();
@@ -2484,7 +2484,9 @@ if (!defined('_ADODB_LAYER')) {
 	}
 
 	/**
-	 * Insert or replace a single record. Note: this is not the same as MySQL's replace.
+	 * Insert or replace a single record (upsert).
+	 *
+	 * Note: this is not the same as MySQL's replace.
 	 * ADOdb's Replace() uses update-insert semantics, not insert-delete-duplicates of MySQL.
 	 * Also note that no table locking is done currently, so it is possible that the
 	 * record be inserted twice by two programs...
@@ -3083,9 +3085,9 @@ if (!defined('_ADODB_LAYER')) {
 		$this->_transmode  = $transaction_mode;
 	}
 /*
-http://msdn2.microsoft.com/en-US/ms173763.aspx
-http://dev.mysql.com/doc/refman/5.0/en/innodb-transaction-isolation.html
-http://www.postgresql.org/docs/8.1/interactive/sql-set-transaction.html
+https://msdn2.microsoft.com/en-US/ms173763.aspx
+https://dev.mysql.com/doc/refman/5.0/en/innodb-transaction-isolation.html
+https://www.postgresql.org/docs/8.1/interactive/sql-set-transaction.html
 http://www.stanford.edu/dept/itss/docs/oracle/10g/server.101/b10759/statements_10005.htm
 */
 	function MetaTransaction($mode,$db) {
@@ -3159,7 +3161,7 @@ http://www.stanford.edu/dept/itss/docs/oracle/10g/server.101/b10759/statements_1
 	 * return the databases that the driver can connect to.
 	 * Some databases will return an empty array.
 	 *
-	 * @return array|bool an array of database names.
+	 * @return array|false an array of database names.
 	 */
 	function MetaDatabases() {
 		global $ADODB_FETCH_MODE;
@@ -4531,7 +4533,7 @@ class ADORecordSet implements IteratorAggregate {
 	 * @param mixed $v		is the character timestamp in YYYY-MM-DD hh:mm:ss format
 	 * @param string [$fmt]	is the format to apply to it, using date()
 	 *
-	 * @return string a timestamp formated as user desires
+	 * @return string a timestamp formatted as user desires
 	 */
 	function UserTimeStamp($v,$fmt='Y-m-d H:i:s') {
 		if (is_numeric($v) && strlen($v)<14) {
